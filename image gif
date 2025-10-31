@@ -1,203 +1,101 @@
---// Services
-local Players = game:GetService("Players")
+--// 🎃 Pumpkin Dance (Smooth GUI Animation)
+--// Simulated GIF + Morph Once | Sigma Spy Version
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
---// Remote Event
 local Morph = ReplicatedStorage:WaitForChild("Events"):WaitForChild("Morph")
-
---// Player Info
 local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
 
---// Morph IDs
-local snoopImageIds = {"102104756416204","138558669679341","121887519993226","89929496299167","91151182153733","138881419105364","84746597106112","100662252471442"}
-local trollMorphIDs = {"119412385629394","121032824603912","124740525930161","75715368220243","111572244503066","91315219261071","120345336843980","109603882704560"}
-local walkIDs = {"120276938286654","123059697265177","120174155685545","104693627517261","93925460365481","119202662146617","96050852360565"}
-local xpcSadIDs = {"80798972811426","108802833697255","101735891121421","77154494704458","97815591031067","139785630049892","79042751379735","70640652957143","97664479791196"}
-local yumBfdiIDs = {"98051514580097","73235936005934","72621228336357","78910605856613","76999387250036"}
-local danceCoolIDs = {"73536020709836","77197010519613","78422145499460","117193052367307","89470782137629","107492337058866","130870541416857","76104593134172","89318190404889","119947788294946","139696101040413","75531843026085"}
-local laughCatIDs = {"125843986196940","88891368113203","90103610997027","105512918009585","118488207480473","86411690289000","108626668629153"}
-local eatCatIDs = {"78185927632068","93547032914466","88677321875471","88881405617887","115560616914467","115469426875079","74361270589769","140456570456303","78279588189077"}
-local hoodWalkIDs = {"91185435713984","105281962917365","81865088363780","93106964176029","77756751173114","92345339056863","77359385270421","74642488492716","114171859269770","92970368921404"}
-local rickRollIDs = {"76477160846742","77322713411610","105105633245238","133693100482397","86412829021080","93682236614049","87665834036595","101745061758416","110166311921657","140633699136174","104326979929079"}
-local pumpkinDanceIDs = {"115389705556628","73117933310716","127081199853136","87380897762379","94286465726642","82778997694228","135539505274400","126527677542560","81450994381345","107134228422243","87393547304045","84905378919842"}
-
---// Default settings
+-- Morph ID (Morph แค่ครั้งเดียว)
+local morphId = "115389705556628" 
 local horiz, vert = "10", "10"
-local stepDelay = 0.2
-local idleID = "127275184453175"
 
---// Morph speeds
-local morphSpeeds = {
-	["snoop dogg"] = 0.18,
-	["troll face"] = 0.19,
-	["among us walk"] = 0.15,
-	["xpc sad gif"] = 0.2,
-	["yum bfdi gif"] = 0.13,
-	["dance cool gif"] = 0.16,
-	["laugh cat gif"] = 0.2,
-	["cat eat snacks gif"] = 0.165,
-	["hood irony walk"] = 0.135,
-	["rick roll gif"] = 0.175,
-	["pumpkin dance"] = 0.14
+-- ภาพที่ใช้ทำ GIF (image ids)
+local gifFrames = {
+	"rbxassetid://115389705556628",
+	"rbxassetid://73117933310716",
+	"rbxassetid://127081199853136",
+	"rbxassetid://87380897762379",
+	"rbxassetid://94286465726642",
+	"rbxassetid://82778997694228",
+	"rbxassetid://135539505274400",
+	"rbxassetid://126527677542560",
+	"rbxassetid://81450994381345",
+	"rbxassetid://107134228422243",
+	"rbxassetid://87393547304045",
+	"rbxassetid://84905378919842"
 }
 
---// GUI Setup
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "UnifiedMorphUI"
+-- GUI
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+screenGui.Name = "PumpkinDance_UI"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
 
---// Main Frame
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 280, 0, 190)
-frame.Position = UDim2.new(0, 10, 0.3, 0)
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 190, 0, 130)
+frame.Position = UDim2.new(0, 10, 0.4, 0)
 frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
-frame.BackgroundTransparency = 0.05
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.Parent = screenGui
+frame.Active, frame.Draggable = true, true
 
---// Title
-local title = Instance.new("TextLabel")
-title.Text = "GIF Custom Image Roleplay"
+local title = Instance.new("TextLabel", frame)
+title.Text = "🎃 Pumpkin Dance"
 title.Font = Enum.Font.GothamBold
 title.TextSize = 18
-title.TextColor3 = Color3.fromRGB(255,255,255)
+title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
-title.Position = UDim2.new(0,10,0,8)
-title.Size = UDim2.new(1,-20,0,25)
-title.Parent = frame
+title.Size = UDim2.new(1, -20, 0, 25)
+title.Position = UDim2.new(0, 10, 0, 8)
 
---// Scroll Area
-local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -20, 0.7, -40)
-scrollFrame.Position = UDim2.new(0,10,0,40)
-scrollFrame.BackgroundTransparency = 1
-scrollFrame.ScrollBarThickness = 6
-scrollFrame.CanvasSize = UDim2.new(0,0,0,1100)
-scrollFrame.Parent = frame
+-- ImageLabel (จำลอง GIF)
+local image = Instance.new("ImageLabel", frame)
+image.Size = UDim2.new(1, -20, 1, -70)
+image.Position = UDim2.new(0, 10, 0, 40)
+image.BackgroundTransparency = 1
+image.Image = gifFrames[1]
+image.ScaleType = Enum.ScaleType.Fit
 
-local layout = Instance.new("UIListLayout")
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Padding = UDim.new(0,5)
-layout.Parent = scrollFrame
+-- ปุ่มควบคุม
+local startBtn = Instance.new("TextButton", frame)
+startBtn.Text = "▶ Start Dance"
+startBtn.Size = UDim2.new(1, -20, 0, 25)
+startBtn.Position = UDim2.new(0, 10, 0, 100)
+startBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+startBtn.TextColor3 = Color3.new(1,1,1)
+startBtn.Font = Enum.Font.Gotham
 
---// Button creator
-local function createButton(text, color)
-	local btn = Instance.new("TextButton")
-	btn.Text = text
-	btn.Font = Enum.Font.Gotham
-	btn.TextSize = 16
-	btn.Size = UDim2.new(1, -10, 0, 28)
-	btn.BackgroundColor3 = color
-	btn.TextColor3 = Color3.fromRGB(255,255,255)
-	btn.BorderSizePixel = 0
-	btn.BackgroundTransparency = 0.05
-	btn.Parent = scrollFrame
-	return btn
-end
+local stopBtn = Instance.new("TextButton", frame)
+stopBtn.Text = "⏹ Stop"
+stopBtn.Size = UDim2.new(1, -20, 0, 25)
+stopBtn.Position = UDim2.new(0, 10, 0, 130)
+stopBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+stopBtn.TextColor3 = Color3.new(1,1,1)
+stopBtn.Font = Enum.Font.Gotham
 
---// Buttons
-local buttons = {
-	{snoopImageIds, "▶ Start Snoop Dogg", Color3.fromRGB(50,50,50)},
-	{trollMorphIDs, "▶ Start Troll Face", Color3.fromRGB(60,60,60)},
-	{walkIDs, "▶ Start Among Us Walk", Color3.fromRGB(70,70,70)},
-	{xpcSadIDs, "▶ Start Xpc Sad GIF", Color3.fromRGB(80,80,80)},
-	{yumBfdiIDs, "▶ Start Yum Bfdi GIF", Color3.fromRGB(90,90,90)},
-	{danceCoolIDs, "▶ Start Dance Cool GIF [Do not use]", Color3.fromRGB(100,100,100)},
-	{laughCatIDs, "▶ Start Laugh Cat GIF", Color3.fromRGB(110,110,110)},
-	{eatCatIDs, "▶ Start Cat Eat Snacks GIF", Color3.fromRGB(120,120,120)},
-	{hoodWalkIDs, "▶ Start Hood Irony Walk", Color3.fromRGB(130,130,130)},
-	{rickRollIDs, "▶ Start Rick Roll GIF", Color3.fromRGB(140,140,140)},
-	{pumpkinDanceIDs, "▶ Start Pumpkin Dance🎃", Color3.fromRGB(255,140,0)}
-}
+-- ตัวแปร loop
+local looping = false
 
-local activeLoop = nil
-local indices = {}
-local buttonOriginalText = {}
+local function startDance()
+	if looping then return end
+	looping = true
+	startBtn.Text = "🎶 Dancing..."
+	Morph:FireServer({ morphId, horiz, vert }) -- morph ครั้งเดียว
 
---// Morph Function
-local function fireMorph(id, h, v)
-	Morph:FireServer({id, h, v})
-end
-
---// Start Loop
-local function startLoop(name, ids, btn)
-	if activeLoop then return end
-	activeLoop = name
-	indices[name] = indices[name] or 1
-	btn.Text = "Running..."
-	local speed = morphSpeeds[name:lower()] or stepDelay
 	task.spawn(function()
-		while activeLoop == name do
-			local h, v = horiz, vert
-			if name == "yum bfdi gif" then h,v = "5.5","5.5" end
-			if name == "among us walk" and humanoid.MoveDirection.Magnitude == 0 then
-				fireMorph(idleID, h, v)
-			else
-				fireMorph(ids[indices[name]], h, v)
-				indices[name] += 1
-				if indices[name] > #ids then indices[name] = 1 end
-			end
-			task.wait(speed)
+		local i = 1
+		while looping do
+			image.Image = gifFrames[i]
+			i = i + 1
+			if i > #gifFrames then i = 1 end
+			task.wait(0.08) -- ความเร็วเฟรม
 		end
-		btn.Text = buttonOriginalText[btn]
 	end)
 end
 
---// Stop All
-local function stopAll()
-	activeLoop = nil
-	for btn, text in pairs(buttonOriginalText) do
-		btn.Text = text
-	end
+local function stopDance()
+	looping = false
+	startBtn.Text = "▶ Start Dance"
 end
 
---// Connect Buttons
-for _, info in ipairs(buttons) do
-	local btn = createButton(info[2], info[3])
-	buttonOriginalText[btn] = info[2]
-	btn.MouseButton1Click:Connect(function()
-		startLoop(info[2]:match("Start (.+)"):lower(), info[1], btn)
-	end)
-end
-
---// Stop All Button
-local stopBtn = Instance.new("TextButton")
-stopBtn.Text = "Stop All"
-stopBtn.Font = Enum.Font.GothamBold
-stopBtn.TextSize = 18
-stopBtn.Size = UDim2.new(1, -20, 0, 36)
-stopBtn.Position = UDim2.new(0, 10, 0.75, 0)
-stopBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-stopBtn.TextColor3 = Color3.fromRGB(255,255,255)
-stopBtn.BorderSizePixel = 0
-stopBtn.Parent = frame
-stopBtn.MouseButton1Click:Connect(stopAll)
-
---// Toggle Button
-local toggleButton = Instance.new("ImageButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(0, 10, 0.25, 100)
-toggleButton.Image = "https://www.roblox.com/Thumbs/Asset.ashx?width=720&height=720&assetId=5361645272"
-toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-toggleButton.AutoButtonColor = true
-toggleButton.Parent = screenGui
-toggleButton.BorderSizePixel = 0
-
-local uicorner = Instance.new("UICorner")
-uicorner.CornerRadius = UDim.new(0, 12)
-uicorner.Parent = toggleButton
-
-local uiStroke = Instance.new("UIStroke")
-uiStroke.Thickness = 3
-uiStroke.Color = Color3.fromRGB(80,80,80)
-uiStroke.Parent = toggleButton
-
-toggleButton.MouseButton1Click:Connect(function()
-	frame.Visible = not frame.Visible
-end)
+startBtn.MouseButton1Click:Connect(startDance)
+stopBtn.MouseButton1Click:Connect(stopDance)
